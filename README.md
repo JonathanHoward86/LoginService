@@ -15,7 +15,7 @@ Bootstrap 5.3.1
 
 Setup
 To run this project, clone the repository and run it using Visual Studio or any other compatible IDE.
-git clone https://github.com/yourusername/LoginService.git
+git clone https://github.com/JonathanHoward86/LoginService.git
 
 Features
 User Login
