@@ -1,0 +1,27 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Please enter your Email and Password then click Register.";
+}
+<div asp-validation-summary="All" class="text-danger"></div>
+<h2>@ViewData["Title"]</h2>
+<form method="post" asp-controller="Registration" asp-action="Register">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="email-label">Email:</span>
+        </div>
+        <input type="text" class="form-control" id="Email" name="Email" aria-describedby="email-label" required autocomplete="email">
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="password-label">Password:</span>
+        </div>
+        <input type="password" class="form-control" id="Password" name="Password" aria-describedby="password-label" required autocomplete="new-password">
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="confirm-password-label">Confirm Password:</span>
+        </div>
+        <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" aria-describedby="confirm-password-label" required autocomplete="new-password">
+    </div>
+    <button type="submit" class="btn btn-primary mb-3">Register</button>
+</form>
