@@ -1,11 +1,11 @@
-# Login Service
-
-This is my local dev environment of the BackendDevProject Respository which I created to more easily test the SQL and SMTP integration.
+Login Service
 
 Introduction
-This project is a login service built using ASP.NET Core 7.0. It provides functionalities for user login, registration, and password management. The project uses Microsoft's Identity framework for user management and NLog for logging.
+
+This project serves as a local development environment for the BackendDevProject Repository. It's designed to facilitate easier testing of SQL and SMTP integrations. Built using ASP.NET Core 7.0, the service provides functionalities for user login, registration, and password management. It leverages Microsoft's Identity framework for secure user management and NLog for robust logging capabilities.
 
 Technologies
+
 ASP.NET Core 7.0
 Microsoft Identity
 Entity Framework Core 7.0.10
@@ -14,50 +14,49 @@ SMTP for Email Services
 Bootstrap 5.3.1
 
 Setup
-To run this project, clone the repository and run it using Visual Studio or any other compatible IDE.
+
+To get started with this project:
+Clone the repository
 git clone https://github.com/JonathanHoward86/LoginService.git
+Open the project using Visual Studio or any other compatible IDE.
+Run the application.
 
 Features
+
 User Login
 User Registration
 Password Reset
 Username Retrieval
 Logging with NLog
 
+Architecture
+
 Controllers
-LoginController
-Handles user login functionalities.
-
-PasswordController
-Handles password-related functionalities.
-
-RegistrationController
-Handles user registration.
+LoginController: Manages user login functionalities.
+PasswordController: Responsible for password-related features.
+RegistrationController: Manages user registration.
 
 Models
-ForgotUsernameModel: For forgotten username requests.
-LoginModel: For login requests.
-RegisterModel: For registration requests.
-ResetPasswordModel: For password reset requests.
-ResetPasswordConfirmModel: For confirming password reset.
+ForgotUsernameModel: Used for forgotten username requests.
+LoginModel: Used for login requests.
+RegisterModel: Used for registration requests.
+ResetPasswordModel: Used for password reset requests.
+ResetPasswordConfirmModel: Used for confirming password resets.
 
 Services
-EmailService
-Implements IEmailService and handles sending emails.
+EmailService: Implements IEmailService and is responsible for sending emails.
 
-Startup Configuration
-Configures services and middleware in Startup.cs.
-
-Program Entry Point
-Initializes the application and configures logging in Program.cs.
+Configuration
+Startup.cs: Configures services and middleware.
+Program.cs: Serves as the entry point for the application, initializing it and setting up logging.
 
 Razor Views
 Contains Razor views for login, registration, password reset, and username retrieval.
 
-Configuration
-appsettings.json: Contains logging and SMTP settings.
+Configuration Files
+appsettings.json: Contains general settings including logging and SMTP configurations.
 appsettings.Development.json: Contains development-specific settings, including the database connection string.
 
 Acknowledgments
 
-The code in this repository were created with a little help from Chat GPT by Jonathan Howard, an aspiring software developer with expertise in Agile Software Development and proficiency in various programming languages.
+The code in this repository was created with assistance from Chat GPT by Jonathan Howard, an aspiring software developer with expertise in Agile Software Development and proficiency in various programming languages.

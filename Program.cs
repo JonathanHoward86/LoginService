@@ -7,22 +7,27 @@ namespace LoginService
     {
         public static void Main(string[] args)
         {
-            // Configure NLog using the new recommended approach
+            // Initialize NLog configurations from app settings
             NLog.LogManager.Setup().LoadConfigurationFromAppSettings();
             var logger = NLog.LogManager.GetCurrentClassLogger();
 
             try
             {
+                // Log application startup
                 logger.Info("Application starting up.");
+
+                // Create and run the host
                 CreateHostBuilder(args, logger).Build().Run();
             }
             catch (Exception ex)
             {
+                // Log any exceptions that stop the application
                 logger.Error(ex, "Application stopped because of exception.");
                 throw;
             }
             finally
             {
+                // Shutdown NLog when application ends
                 NLog.LogManager.Shutdown();
             }
         }
@@ -31,25 +36,31 @@ namespace LoginService
                     Host.CreateDefaultBuilder(args)
                         .ConfigureLogging(logging =>
                         {
+                            // Clear existing logging providers and set log level
                             logging.ClearProviders();
                             logging.SetMinimumLevel(LogLevel.Trace);
                         })
-                        .UseNLog()
+                        .UseNLog()  // Use NLog for logging
                         .ConfigureWebHostDefaults(webBuilder =>
                         {
+                            // Use Startup class and configure Kestrel server
                             webBuilder.UseStartup<Startup>()
                             .UseKestrel(options =>
                             {
-                                options.Listen(IPAddress.Loopback, 5002);  // HTTP
+                                // Listen on HTTP port 5002
+                                options.Listen(IPAddress.Loopback, 5002);
+
+                                // Listen on HTTPS port 5001
                                 try
                                 {
                                     options.Listen(IPAddress.Loopback, 5001, listenOptions =>
                                     {
                                         listenOptions.UseHttps("C:\\Coding\\sslcert.pfx", "1Test@");
-                                    });  // HTTPS
+                                    });
                                 }
                                 catch (Exception ex)
                                 {
+                                    // Log failure to start HTTPS
                                     logger.Error(ex, "Failed to start HTTPS.");
                                     throw;
                                 }
