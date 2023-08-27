@@ -18,6 +18,7 @@ namespace LoginService.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
             Logger.Info("Entered Login POST method");

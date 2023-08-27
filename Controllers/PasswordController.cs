@@ -21,6 +21,7 @@ namespace LoginService.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
         {
             Logger.Info("Entered ResetPassword POST method");
@@ -35,7 +36,7 @@ namespace LoginService.Controllers
                 if (user != null)
                 {
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    var resetUrl = Url.Action("ResetPasswordConfirm", "Account", new { token, email = model.Email }, Request.Scheme);
+                    var resetUrl = Url.Action("ResetPasswordConfirm", "Password", new { token, email = model.Email }, Request.Scheme);
                     var emailBody = $"Please reset your password by clicking <a href='{resetUrl}'>here</a>.";
                     await _emailService.SendEmail(model.Email, "Reset Password", emailBody);
                     return RedirectToAction("ResetPasswordEmailSent");
@@ -59,49 +60,76 @@ namespace LoginService.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult ResetPasswordConfirm(string token, string email)
-        {
-            Logger.Info("Entered ResetPasswordConfirm GET method");
-            var model = new ResetPasswordConfirmModel { Token = token, Email = email };
-            return View("~/Views/Password/ResetPasswordConfirm.cshtml", model);
-        }
-
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPasswordConfirm(ResetPasswordConfirmModel model)
         {
             Logger.Info("Entered ResetPasswordConfirm POST method");
+
             if (ModelState.IsValid)
             {
+                Logger.Info($"Valid model state. Email: {model.Email}, Token: {model.Token}");
+
                 if (model.Email == null) // Check if Email is null
                 {
+                    Logger.Warn("Email is null");
                     ModelState.AddModelError("", "Email must not be null");
                     return View(model);
                 }
-                
+
                 var user = await _userManager.FindByEmailAsync(model.Email);
 
                 if (user != null)
                 {
+                    Logger.Info($"User found: {user.UserName}");
+
                     if (model.Token != null && model.NewPassword != null)
                     {
+                        Logger.Info("Token and NewPassword are not null, proceeding to reset password.");
+
                         var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+
                         if (result.Succeeded)
                         {
+                            Logger.Info("Password reset was successful.");
                             return RedirectToAction("ResetPasswordSuccess");
                         }
-                        foreach (var error in result.Errors)
+                        else
                         {
-                            ModelState.AddModelError("", error.Description);
+                            Logger.Warn("Password reset failed.");
+                            foreach (var error in result.Errors)
+                            {
+                                ModelState.AddModelError("", error.Description);
+                                Logger.Error($"Error during password reset: {error.Description}");
+                            }
                         }
                     }
                     else
                     {
+                        Logger.Warn("Token and/or New Password is null");
                         ModelState.AddModelError("", "Token and New Password must not be null");
                     }
                 }
+                else
+                {
+                    Logger.Warn($"User not found for email: {model.Email}");
+                }
             }
+            else
+            {
+                Logger.Warn("Invalid model state.");
+            }
+
             Logger.Info("Exiting ResetPasswordConfirm POST method");
+            return View("~/Views/Password/ResetPasswordConfirm.cshtml", model);
+        }
+
+        [HttpGet]
+        public IActionResult ResetPasswordConfirm(string token, string email)
+        {
+            Logger.Info("Entered ResetPasswordConfirm GET method");
+            Logger.Info($"Received token: {token}, email: {email}");
+            var model = new ResetPasswordConfirmModel { Token = token, Email = email };
             return View("~/Views/Password/ResetPasswordConfirm.cshtml", model);
         }
 
@@ -111,6 +139,7 @@ namespace LoginService.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotUsername(ForgotUsernameModel model)
         {
             Logger.Info("Entered ForgotUsername POST method");
