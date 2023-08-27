@@ -1,18 +1,6 @@
 # Login Service
 
-Table of Contents
-Introduction
-Technologies
-Setup
-Features
-Controllers
-Models
-Services
-Startup Configuration
-Razor Views
-Configuration
-Contributing
-License
+This is my local dev environment of the BackendDevProject Respository which I created to more easily test the SQL and SMTP integration.
 
 Introduction
 This project is a login service built using ASP.NET Core 7.0. It provides functionalities for user login, registration, and password management. The project uses Microsoft's Identity framework for user management and NLog for logging.
